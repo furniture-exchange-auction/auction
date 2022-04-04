@@ -1,5 +1,5 @@
 import Head from 'next/head'
-import Image from 'next/image'
+import Image from '../components/Image'
 import styles from '../styles/Home.module.css'
 import NavBar from '../components/NavBar'
 import ProductList from '../components/ProductList'
