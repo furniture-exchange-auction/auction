@@ -11,7 +11,7 @@ export const updateBid = createAsyncThunk(
 		try {
 			console.log('in the updateBid thunk function');
 			const updateBid = await fetch(`/api/items/${id}`, {
-				method: 'PUT',
+				method: 'POST',
 				headers: {
 					'Content-Type': 'Application/JSON'
 				},

@@ -50,7 +50,7 @@ export const addItem = createAsyncThunk(
 );
 
 export const editItem = createAsyncThunk(
-    '/items/editItem',
+    'api/items/editItem',
     async (editBody) => {
       try {
         console.log('editBody',editBody);
@@ -71,7 +71,7 @@ export const editItem = createAsyncThunk(
   );
 
 	export const deleteItem = createAsyncThunk(
-  '/items/deleteItem',
+  'api/items/deleteItem',
   async (id) => {
     try {
       const deletedItem = await fetch(`api/items/${id}`, {
@@ -104,7 +104,7 @@ const itemReducer = createSlice({
       console.log('In builder ');
       console.log(action.payload)
 
-      state.items = action.payload;
+      state.syncItems = action.payload;
     });
   }
 })
