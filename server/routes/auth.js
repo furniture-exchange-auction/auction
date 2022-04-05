@@ -17,11 +17,12 @@ passport.use(
     {
       clientID: process.env['GOOGLE_CLIENT_ID'],
       clientSecret: process.env['GOOGLE_CLIENT_SECRET'],
-      callbackURL: 'api/oauth2/redirect/google',
+      callbackURL: 'http://localhost:3080/api/oauth2/redirect/google',
       scope: ['profile'],
     },
 
     function (issuer, profile, cb) {
+      console.log('in strategy');
       db.get(
         'SELECT * FROM federated_credentials WHERE provider = ? AND subject = ?',
         [issuer, profile.id],
@@ -76,7 +77,10 @@ passport.use(
   )
 );
 
-router.get('/federated/google', passport.authenticate('google'));
+router.get(
+  '/federated/google',
+  passport.authenticate('google', { scope: ['profile'] })
+);
 
 router.get(
   '/oauth2/redirect/google',
