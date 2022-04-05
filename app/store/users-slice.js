@@ -10,6 +10,7 @@ const initialUserState = {
   loggedIn: false,
   username: '',
   firstName: '',
+  watchList: [],
   items: []
 };
 
@@ -76,7 +77,11 @@ export const userItems = createAsyncThunk(
 const userSlice = createSlice({
   name: 'users',
   initialState: initialUserState,
-  reducers: {},
+  reducers: {
+    setWatchList(state, action) {
+      state.watchList = action.payload;
+    }
+  },
   extraReducers: (builder) => {
     builder
       .addCase(loginThunk.fullfilled, (state, action) => {
@@ -95,11 +100,11 @@ const userSlice = createSlice({
         }
       })
       .addCase(userItems.fulfilled, (state, action) => {
-      console.log('In builder ');
-      console.log(action.payload)
-      state.userItems = action.payload;
+        state.userItems = action.payload;
     });
   },
 });
+
+export const userActions = userSlice.actions;
 
 export default userSlice.reducer;
