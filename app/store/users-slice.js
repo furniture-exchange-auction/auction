@@ -10,10 +10,11 @@ const initialUserState = {
   loggedIn: false,
   username: '',
   firstName: '',
+  items: []
 };
 
 export const loginThunk = createAsyncThunk(
-  'users/getLoginStatus',
+  'api/users/getLoginStatus',
   async (body) => {
     try {
       console.log('in the login Thunk, body: ', body);
@@ -92,7 +93,12 @@ const userSlice = createSlice({
           state.username = action.payload.username;
           state.firstName = action.payload.firstName;
         }
-      });
+      })
+      .addCase(userItems.fulfilled, (state, action) => {
+      console.log('In builder ');
+      console.log(action.payload)
+      state.userItems = action.payload;
+    });
   },
 });
 
