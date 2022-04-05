@@ -1,6 +1,6 @@
 const express = require('express');
-var passport = require('passport');
-var GoogleStrategy = require('passport-google-oauth20');
+const passport = require('passport');
+const GoogleStrategy = require('passport-google-oauth20');
 const db = require('../models/auction');
 
 passport.use(
@@ -9,7 +9,7 @@ passport.use(
       clientID: process.env['GOOGLE_CLIENT_ID'],
       clientSecret: process.env['GOOGLE_CLIENT_SECRET'],
       callbackURL: '/api/oauth2/redirect/google',
-      scope: ['profile'],
+      scope: ['profile', 'email'],
       state: true,
     },
     function (accessToken, refreshToken, profile, cb) {
@@ -69,32 +69,24 @@ passport.use(
 );
 
 passport.serializeUser(function (user, cb) {
-  process.nextTick(function () {
-    cb(null, { id: user.id, username: user.username, name: user.name });
-  });
+  cb(null, user);
 });
 
 passport.deserializeUser(function (user, cb) {
-  process.nextTick(function () {
-    return cb(null, user);
-  });
+  cb(null, user);
 });
 
 const router = express.Router();
 
 router.get(
   '/federated/google',
-  (req, res, next) => {
-    console.log('hello');
-    next();
-  },
   passport.authenticate('google')
 );
 
 router.get(
   '/oauth2/redirect/google',
   passport.authenticate('google', {
-    successReturnToOrRedirect: '/',
+    successRedirect: '/',
     failureRedirect: '/login',
   })
 );
