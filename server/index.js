@@ -53,6 +53,10 @@ app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, '../app/out/index.html'));
 });
 
+app.get('/login', (req, res) => {
+  res.sendFile(path.join(__dirname, '../app/out/login.html'));
+});
+
 //Page not found catch-all
 app.use('/*', (req, res, next) => {
   res.status(404).json('Page not found.');
