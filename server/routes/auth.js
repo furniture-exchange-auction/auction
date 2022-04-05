@@ -14,56 +14,86 @@ passport.use(
     },
     function (accessToken, refreshToken, profile, cb) {
       console.log('in strategy');
-      db.get(
-        'SELECT * FROM federated_credentials WHERE provider = ? AND subject = ?',
-        ['https://accounts.google.com', profile.id],
-        function (err, row) {
-          if (err) {
-            return cb(err);
-          }
-          if (!row) {
-            db.run(
-              'INSERT INTO accounts (display_name) VALUES (?)',
-              [profile.displayName],
-              function (err) {
-                if (err) {
-                  return cb(err);
-                }
-
-                var id = this.lastID;
-                db.run(
-                  'INSERT INTO federated_credentials (user_id, provider, subject) VALUES (?, ?, ?)',
-                  [id, 'https://accounts.google.com', profile.id],
-                  function (err) {
-                    if (err) {
-                      return cb(err);
-                    }
-                    var user = {
-                      id: id,
-                      name: profile.displayName,
+      const issuer = 'https://accounts.google.com';
+      db.query('SELECT * FROM federated_credentials WHERE provider = $1 AND subject = $2', [issuer, profile.id])
+        .then((fedSearch) => {
+          console.log('fedSearch', fedSearch);
+          if (!fedSearch.rows.length) {
+            db.query('INSERT INTO account (display_name) VALUES ($1) RETURNING *', [profile.displayName])
+              .then((addAccount) => {
+                console.log('addAccount', addAccount);
+                const id = addAccount.rows[0]._id;
+                db.query('INSERT INTO federated_credentials (user_id, provider, subject) VALUES ($1, $2, $3) RETURNING *', [id, issuer, profile.id])
+                  .then((addFed) => {
+                    console.log('addFed', addFed);
+                    const { userId, userDisplayName } = addFed.rows[0];
+                    const user = {
+                      id: userId,
+                      displayName: userDisplayName
                     };
+                    // res.locals.user = user;
+                    console.log('success!', user);
                     return cb(null, user);
-                  }
-                );
-              }
-            );
-          } else {
-            db.get(
-              'SELECT rowid AS id, * FROM accounts WHERE rowid = ?',
-              [row.account_id],
-              function (err, row) {
-                if (err) {
-                  return cb(err);
-                }
-                if (!row) {
-                  return cb(null, false);
-                }
-                return cb(null, row);
-              }
-            );
+                  })
+                  .catch((err) => {
+                    console.log('federated credentials insert', err.message);
+                    return cb(err);
+                    // return next({
+                    //   log: `Error in passport strategy federated credentials insert: ${err.message}`,
+                    //   status: 500,
+                    //   message: { err: 'An unknown error occurred - please try again' },
+                    // });
+                  })
+              })
+              .catch((err) => {
+                console.log('account insert', err.message);
+                return cb(err);
+                // return next({
+                //   log: `Error in passport strategy account insert: ${err.message}`,
+                //   status: 500,
+                //   message: { err: 'An unknown error occurred - please try again' },
+                // });
+              })
           }
-        }
-      );
+          else {
+            db.query('SELECT * FROM account WHERE _id = $1', [fedSearch.rows[0].user_id])
+              .then((accSearch) => {
+                console.log('accSearch', accSearch);
+                if (!accSearch.rows.length) {
+                  console.log('account query unsuccesful');
+                  return cb(null, false);
+                } 
+                else {
+                  const { _id, display_name } = accSearch.rows[0];
+                  const user = {
+                    id: _id,
+                    displayName: display_name
+                  };
+                  // res.locals.user = user;
+                  console.log('success!', user);
+                  return cb(null, user);
+                } 
+              })
+              .catch((err) => {
+                console.log('account query', err.message);
+                return cb(err);
+                // return next({
+                //   log: `Error in passport strategy account query: ${err.message}`,
+                //   status: 500,
+                //   message: { err: 'An unknown error occurred - please try again' },
+                // });
+              })
+          }
+        })
+        .catch((err) => {
+          console.log('federated credentials query', err.message);
+          return cb(err);
+          // return next({
+          //   log: `Error in passport strategy federated credentials query: ${err.message}`,
+          //   status: 500,
+          //   message: { err: 'An unknown error occurred - please try again' },
+          // });
+        })
     }
   )
 );
