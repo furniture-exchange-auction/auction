@@ -255,18 +255,6 @@ export default function NavBar() {
                   </a>
                 </div>
               </div>
-
-              <div className="border-t border-gray-200 py-6 px-4">
-                <a href="#" className="-m-2 p-2 flex items-center">
-                  <img
-                    src="https://tailwindui.com/img/flags/flag-canada.svg"
-                    alt=""
-                    className="w-5 h-auto block flex-shrink-0"
-                  />
-                  <span className="ml-3 block text-base font-medium text-gray-900">CAD</span>
-                  <span className="sr-only">, change currency</span>
-                </a>
-              </div>
             </div>
           </Transition.Child>
         </Dialog>
@@ -408,17 +396,6 @@ export default function NavBar() {
                   </a>
                 </div>
 
-                <div className="hidden lg:ml-8 lg:flex">
-                  <a href="#" className="text-gray-700 hover:text-gray-800 flex items-center">
-                    <img
-                      src="https://tailwindui.com/img/flags/flag-canada.svg"
-                      alt=""
-                      className="w-5 h-auto block flex-shrink-0"
-                    />
-                    <span className="ml-3 block text-sm font-medium">CAD</span>
-                    <span className="sr-only">, change currency</span>
-                  </a>
-                </div>
 
                 {/* Search */}
                 <div className="flex lg:ml-6">
