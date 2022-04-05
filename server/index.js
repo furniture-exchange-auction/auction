@@ -5,9 +5,11 @@ const express = require('express');
 const cors = require('cors');
 const path = require('path');
 const authRouter = require('./routes/auth');
-
+var cookieParser = require('cookie-parser');
 const db = require('./models/auction');
-
+var session = require('express-session');
+//var csrf = require('csurf');
+var passport = require('passport');
 const app = express();
 
 app.use(cors());
@@ -23,6 +25,27 @@ app.use(function (req, res, next) {
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(cookieParser());
+app.use(
+  session({
+    secret: `${process.env['SECRET_KEY']}`,
+    resave: false, // don't save session if unmodified
+    saveUninitialized: false, // don't create session until something stored
+  })
+);
+// app.use(csrf());
+app.use(passport.authenticate('session'));
+app.use(function (req, res, next) {
+  var msgs = req.session.messages || [];
+  res.locals.messages = msgs;
+  res.locals.hasMessages = !!msgs.length;
+  req.session.messages = [];
+  next();
+});
+// app.use(function (req, res, next) {
+//   res.locals.csrfToken = req.csrfToken();
+//   next();
+// });
 
 // serve static files
 app.use(express.static(path.join(__dirname, '../app/out')));
@@ -51,6 +74,10 @@ app.get('/api/auction', (req, res, next) => {
 //respond with entry point to Next.js applciation
 app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, '../app/out/index.html'));
+});
+
+app.get('/login', (req, res) => {
+  res.sendFile(path.join(__dirname, '../app/out/login.html'));
 });
 
 //Page not found catch-all
