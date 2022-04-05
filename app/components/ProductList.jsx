@@ -1,5 +1,4 @@
-
-const products = [ 
+const products = [
 	{
 		id: 1,
 		name: 'Earthen Bottle',
@@ -40,7 +39,6 @@ export default function ProductList() {
 		<div className="bg-white">
 			<div className="max-w-2xl mx-auto py-10 px-4 sm:py-6 sm:px-6 lg:max-w-7xl lg:px-8">
 				<h2 className="sr-only">Products</h2>
-
 				<div className="grid grid-cols-1 gap-y-10 sm:grid-cols-2 gap-x-6 lg:grid-cols-3 xl:grid-cols-4 xl:gap-x-8">
 					{products.map((product) => (
 						<a key={product.id} href={product.href} className="group">
@@ -52,7 +50,12 @@ export default function ProductList() {
 								/>
 							</div>
 							<h3 className="mt-4 text-sm text-gray-700">{product.name}</h3>
-							<p className="mt-1 text-lg font-medium text-gray-900">{product.price}</p>
+							<span className="mt-1 text-lg font-medium text-gray-900">{product.price}</span>
+							<a 
+        					className="text-white bg-green-700 hover:bg-green-800 focus:outline-none focus:ring-4 focus:ring-green-300 font-medium rounded-full text-sm px-3 py-1.5 text-center mr-2 mb-2 dark:bg-green-600 dark:hover:bg-green-700
+						    dark:focus:ring-green-800"
+							href="/details"
+        					>Bid</a>
 						</a>
 					))}
 				</div>
