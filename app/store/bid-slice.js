@@ -6,16 +6,16 @@ const initialBidState = {
 }
 
 export const updateBid = createAsyncThunk(
-	'api/updateBid',
-	async (body) => {
+	'api/items/updateBid',
+	async (price, id) => {
 		try {
 			console.log('in the updateBid thunk function');
-			const updateBid = await fetch('/api', {
+			const updateBid = await fetch(`/api/items/${id}`, {
 				method: 'PUT',
 				headers: {
 					'Content-Type': 'Application/JSON'
 				},
-				body: JSON.stringify(body)
+				body: JSON.stringify(price)
 			});
 			return updateBid;
 		} catch (e) {

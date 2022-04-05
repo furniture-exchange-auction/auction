@@ -1,6 +1,11 @@
 import { createSlice } from '@reduxjs/toolkit'
 import { createAsyncThunk } from '@reduxjs/toolkit'
 
+/* 
+Getting all items in db to store in items array
+User sets Item name (title)
+Checking to see if we got items from db
+*/
 const initialItemsState = {
 	items: [],
 	setItemName: '',
@@ -49,7 +54,7 @@ export const editItem = createAsyncThunk(
     async (editBody) => {
       try {
         console.log('editBody',editBody);
-        console.log('in the editRecipes Thunk function');
+        console.log('in the editItem Thunk function');
         const editItem = await fetch('api/items', {
           method: 'PUT',
           headers: {
@@ -99,7 +104,7 @@ const itemReducer = createSlice({
       console.log('In builder ');
       console.log(action.payload)
 
-      state.recipes = action.payload;
+      state.items = action.payload;
     });
   }
 })

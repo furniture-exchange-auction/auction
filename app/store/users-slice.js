@@ -1,10 +1,16 @@
 import { createSlice } from '@reduxjs/toolkit'
 import { createAsyncThunk } from '@reduxjs/toolkit'
 
+/*
+Checking to see if user is signed in
+Setting username, firstname 
+Adding all items for user in array
+*/
 const initialUserState = {
 	loggedIn: false,
 	username: '',
 	firstName: '',
+  userItems: []
 };
 
 export const loginThunk = createAsyncThunk(
@@ -12,7 +18,7 @@ export const loginThunk = createAsyncThunk(
 	async (body) => {
 		try {
 			console.log('in the login Thunk, body: ', body);
-			const responseJSON = await fetch('/user/login', {
+			const responseJSON = await fetch('/api/user/login', {
 				method: 'POST',
 				headrers: {
 					'content-Type': 'application/json'
@@ -29,11 +35,11 @@ export const loginThunk = createAsyncThunk(
 );
 
 export const signupThunk = createAsyncThunk(
-  'users/getSignupStatus',
+  'api/users/getSignupStatus',
   async (body) => {
     try {
       console.log('in the signup Thunk function, body:', body);
-      const responseJSON = await fetch('/user/signup',{
+      const responseJSON = await fetch('/api/user/signup',{
         method: 'POST', // *GET, POST, PUT, DELETE, etc.
         headers: {
           'Content-Type': 'application/json'
@@ -48,6 +54,24 @@ export const signupThunk = createAsyncThunk(
     }
   }
 );
+
+export const userItems = createAsyncThunk(
+    'api/user/items/${id}',
+    async (id) => {
+      try {
+        console.log('in the userItems Thunk function');
+        const responseJSON = await fetch(`/api/user/items/${id}`);
+        const response = await responseJSON.json();
+        
+        console.log('Here is your data: ', response);
+        if(Array.isArray(response)) {
+          return response.reverse();
+        } else return response;
+      } catch (e) {
+        console.log(e);
+      }
+    }
+  );
 
 const userSlice = createSlice({
 	name: 'users',
@@ -69,7 +93,13 @@ const userSlice = createSlice({
           state.username = action.payload.username;
           state.firstName = action.payload.firstName;
         }
-      });
+      })
+      .addCase(userItems.fulfilled, (state, action) => {
+        console.log('In builder ');
+        console.log(action.payload)
+
+        state.userItems = action.payload;
+    });
 	}
 })
 
