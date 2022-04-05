@@ -1,5 +1,5 @@
-import { createSlice } from '@reduxjs/toolkit'
-import { createAsyncThunk } from '@reduxjs/toolkit'
+import { createSlice } from '@reduxjs/toolkit';
+import { createAsyncThunk } from '@reduxjs/toolkit';
 
 /*
 Checking to see if user is signed in
@@ -7,31 +7,30 @@ Setting username, firstname
 Adding all items for user in array
 */
 const initialUserState = {
-	loggedIn: false,
-	username: '',
-	firstName: '',
-  userItems: []
+  loggedIn: false,
+  username: '',
+  firstName: '',
 };
 
 export const loginThunk = createAsyncThunk(
-	'users/getLoginStatus',
-	async (body) => {
-		try {
-			console.log('in the login Thunk, body: ', body);
-			const responseJSON = await fetch('/api/user/login', {
-				method: 'POST',
-				headrers: {
-					'content-Type': 'application/json'
-				},
-				body: JSON.stringify(body)
-			});
-			const response = await responseJSON.json();
-			console.log('login data respose: ', response)
-			return response;
-		}catch(e){
-			console.error(e)
-		}
-	}
+  'users/getLoginStatus',
+  async (body) => {
+    try {
+      console.log('in the login Thunk, body: ', body);
+      const responseJSON = await fetch('/api/login', {
+        method: 'POST',
+        headrers: {
+          'content-Type': 'application/json',
+        },
+        body: JSON.stringify(body),
+      });
+      const response = await responseJSON.json();
+      console.log('login data respose: ', response);
+      return response;
+    } catch (e) {
+      console.error(e);
+    }
+  }
 );
 
 export const signupThunk = createAsyncThunk(
@@ -39,12 +38,12 @@ export const signupThunk = createAsyncThunk(
   async (body) => {
     try {
       console.log('in the signup Thunk function, body:', body);
-      const responseJSON = await fetch('/api/user/signup',{
+      const responseJSON = await fetch('/api/signup', {
         method: 'POST', // *GET, POST, PUT, DELETE, etc.
         headers: {
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
         },
-        body: JSON.stringify(body)
+        body: JSON.stringify(body),
       });
       const response = await responseJSON.json();
       console.log('signup data response: ', response);
@@ -74,33 +73,27 @@ export const userItems = createAsyncThunk(
   );
 
 const userSlice = createSlice({
-	name: 'users',
-	initialState: initialUserState,
-	reducers: {},
-	extraReducers: (builder) => {
-		builder
-			.addCase(loginThunk.fullfilled, (state, action) => {
-				if(action.payload.loggedIn) {
-          state.loggedIn = action.payload.loggedIn;
-          state.username = action.payload.username;
-          state.firstName = action.payload.firstName;
-        }
-			})
-			.addCase(signupThunk.fulfilled, (state, action) => {
-        console.log('In builder login, loggedIn:', action.payload);
-        if(action.payload.loggedIn) {
+  name: 'users',
+  initialState: initialUserState,
+  reducers: {},
+  extraReducers: (builder) => {
+    builder
+      .addCase(loginThunk.fullfilled, (state, action) => {
+        if (action.payload.loggedIn) {
           state.loggedIn = action.payload.loggedIn;
           state.username = action.payload.username;
           state.firstName = action.payload.firstName;
         }
       })
-      .addCase(userItems.fulfilled, (state, action) => {
-        console.log('In builder ');
-        console.log(action.payload)
+      .addCase(signupThunk.fulfilled, (state, action) => {
+        console.log('In builder login, loggedIn:', action.payload);
+        if (action.payload.loggedIn) {
+          state.loggedIn = action.payload.loggedIn;
+          state.username = action.payload.username;
+          state.firstName = action.payload.firstName;
+        }
+      });
+  },
+});
 
-        state.userItems = action.payload;
-    });
-	}
-})
-
-export default userSlice.reducer
+export default userSlice.reducer;

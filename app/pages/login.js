@@ -91,6 +91,7 @@ export default function Login() {
                 </span>
                 Sign in
               </button>
+              <a class="button google" href="api/login/federated/google">Sign in with Google</a>
             </div>
           </form>
         </div>

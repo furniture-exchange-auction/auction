@@ -4,10 +4,22 @@ const express = require('express');
 
 const cors = require('cors');
 const path = require('path');
+const authRouter = require('./routes/auth');
+
+const db = require('./models/auction');
 
 const app = express();
 
 app.use(cors());
+
+app.use(function (req, res, next) {
+  res.header('Access-Control-Allow-Origin', '');
+  res.header(
+    'Access-Control-Allow-Headers',
+    'Origin, X-Requested-With, Content-Type, Accept'
+  );
+  next();
+});
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -16,12 +28,34 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, '../app/out')));
 
 // configure routes
+app.use('/api', authRouter);
+
+//test
 app.get('/api', (req, res, next) => {
   res.send('backend connected');
 });
 
+// db test
+app.get('/api/auction', (req, res, next) => {
+  db.query('SELECT * FROM account')
+    .then((data) => {
+      console.log('query successful', data.rows);
+      res.json(data.rows);
+    })
+    .catch((err) => {
+      console.log('query unsuccessful', err);
+      res.send(err);
+    });
+});
+
+//respond with entry point to Next.js applciation
 app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, '../app/out/index.html'));
+});
+
+//Page not found catch-all
+app.use('/*', (req, res, next) => {
+  res.status(404).json('Page not found.');
 });
 
 // configire express global error handler
