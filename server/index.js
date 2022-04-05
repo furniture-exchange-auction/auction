@@ -6,6 +6,8 @@ const cors = require('cors');
 const path = require('path');
 const authRouter = require('./routes/auth');
 
+const db = require('./models/auction');
+
 const app = express();
 
 app.use(cors());
@@ -31,6 +33,19 @@ app.use('/api', authRouter);
 //test
 app.get('/api', (req, res, next) => {
   res.send('backend connected');
+});
+
+// db test
+app.get('/api/auction', (req, res, next) => {
+  db.query('SELECT * FROM account')
+    .then((data) => {
+      console.log('query successful', data.rows);
+      res.json(data.rows);
+    })
+    .catch((err) => {
+      console.log('query unsuccessful', err);
+      res.send(err);
+    });
 });
 
 //respond with entry point to Next.js applciation
