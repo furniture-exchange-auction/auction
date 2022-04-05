@@ -1,7 +1,14 @@
 const express = require('express');
-const passport = require('passport');
-const GoogleStrategy = require('passport-google-oidc');
+
 const router = express.Router();
+
+passport.serializeUser(function(user, done) {
+  done(null, user);
+});
+
+passport.deserializeUser(function(user, done) {
+      done(null, user);
+});
 
 passport.use(new GoogleStrategy({
   clientID: process.env['GOOGLE_CLIENT_ID'],
@@ -46,7 +53,7 @@ function(issuer, profile, cb) {
   });
 }));
 
-router.get('/login/federated/google', passport.authenticate('google'));
+router.get('/federated/google', passport.authenticate('google'));
 
 router.get('/oauth2/redirect/google', passport.authenticate('google', {
   successRedirect: '/',
