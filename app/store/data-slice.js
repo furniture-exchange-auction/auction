@@ -1,18 +1,23 @@
 import { createSlice } from '@reduxjs/toolkit'
 import { createAsyncThunk } from '@reduxjs/toolkit'
 
+/* 
+Getting all items in db to store in items array
+User sets Item name (title)
+Checking to see if we got items from db
+*/
 const initialItemsState = {
 	items: [],
 	setItemName: '',
-    gotItems: false,
+  gotItems: false,
 }
 
 export const syncItems = createAsyncThunk(
-    'items/syncItems',
+    'api/items/syncItems',
     async () => {
       try {
         console.log('in the syncItems Thunk function');
-        const responseJSON = await fetch('/items');
+        const responseJSON = await fetch('api/items');
         const response = await responseJSON.json();
         
         console.log('Here is your data: ', response);
@@ -26,10 +31,10 @@ export const syncItems = createAsyncThunk(
   );
 
 export const addItem = createAsyncThunk(
-  '/items/addItem',
+  'api/items/addItem',
   async (body) => {
     try {
-      const addedIem = await fetch('/items', {
+      const addedIem = await fetch('api/items', {
         method: 'POST',
         headers: {
           'Content-Type': 'Application/JSON',
@@ -49,8 +54,8 @@ export const editItem = createAsyncThunk(
     async (editBody) => {
       try {
         console.log('editBody',editBody);
-        console.log('in the editRecipes Thunk function');
-        const editItem = await fetch('/items', {
+        console.log('in the editItem Thunk function');
+        const editItem = await fetch('api/items', {
           method: 'PUT',
           headers: {
             'Content-Type': 'Application/JSON',
@@ -69,7 +74,7 @@ export const editItem = createAsyncThunk(
   '/items/deleteItem',
   async (id) => {
     try {
-      const deletedItem = await fetch(`/items/${id}`, {
+      const deletedItem = await fetch(`api/items/${id}`, {
         method: 'DELETE',
         headers: {
           'Content-Type': 'Application/JSON',
@@ -83,7 +88,7 @@ export const editItem = createAsyncThunk(
   }
 );
 
-const itemReducer = createAsyncThunk({
+const itemReducer = createSlice({
 	name: 'items',
 	initialState: initialItemsState,
 	reducers: {
@@ -99,7 +104,7 @@ const itemReducer = createAsyncThunk({
       console.log('In builder ');
       console.log(action.payload)
 
-      state.recipes = action.payload;
+      state.items = action.payload;
     });
   }
 })

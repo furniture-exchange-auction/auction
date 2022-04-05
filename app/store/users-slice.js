@@ -1,6 +1,11 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { createAsyncThunk } from '@reduxjs/toolkit';
 
+/*
+Checking to see if user is signed in
+Setting username, firstname 
+Adding all items for user in array
+*/
 const initialUserState = {
   loggedIn: false,
   username: '',
@@ -29,7 +34,7 @@ export const loginThunk = createAsyncThunk(
 );
 
 export const signupThunk = createAsyncThunk(
-  'users/getSignupStatus',
+  'api/users/getSignupStatus',
   async (body) => {
     try {
       console.log('in the signup Thunk function, body:', body);
@@ -48,6 +53,24 @@ export const signupThunk = createAsyncThunk(
     }
   }
 );
+
+export const userItems = createAsyncThunk(
+    'api/user/items/${id}',
+    async (id) => {
+      try {
+        console.log('in the userItems Thunk function');
+        const responseJSON = await fetch(`/api/user/items/${id}`);
+        const response = await responseJSON.json();
+        
+        console.log('Here is your data: ', response);
+        if(Array.isArray(response)) {
+          return response.reverse();
+        } else return response;
+      } catch (e) {
+        console.log(e);
+      }
+    }
+  );
 
 const userSlice = createSlice({
   name: 'users',
