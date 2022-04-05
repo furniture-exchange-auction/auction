@@ -1,31 +1,22 @@
 const express = require('express');
 var passport = require('passport');
-var GoogleStrategy = require('passport-google-oidc');
-const router = express.Router();
+var GoogleStrategy = require('passport-google-oauth20');
 const db = require('../models/auction');
-
-passport.serializeUser(function (user, done) {
-  done(null, user);
-});
-
-passport.deserializeUser(function (user, done) {
-  done(null, user);
-});
 
 passport.use(
   new GoogleStrategy(
     {
       clientID: process.env['GOOGLE_CLIENT_ID'],
       clientSecret: process.env['GOOGLE_CLIENT_SECRET'],
-      callbackURL: 'http://localhost:3080/api/oauth2/redirect/google',
+      callbackURL: '/api/oauth2/redirect/google',
       scope: ['profile'],
+      state: true,
     },
-
-    function (issuer, profile, cb) {
+    function (accessToken, refreshToken, profile, cb) {
       console.log('in strategy');
       db.get(
         'SELECT * FROM federated_credentials WHERE provider = ? AND subject = ?',
-        [issuer, profile.id],
+        ['https://accounts.google.com', profile.id],
         function (err, row) {
           if (err) {
             return cb(err);
@@ -42,7 +33,7 @@ passport.use(
                 var id = this.lastID;
                 db.run(
                   'INSERT INTO federated_credentials (user_id, provider, subject) VALUES (?, ?, ?)',
-                  [id, issuer, profile.id],
+                  [id, 'https://accounts.google.com', profile.id],
                   function (err) {
                     if (err) {
                       return cb(err);
@@ -77,15 +68,33 @@ passport.use(
   )
 );
 
+passport.serializeUser(function (user, cb) {
+  process.nextTick(function () {
+    cb(null, { id: user.id, username: user.username, name: user.name });
+  });
+});
+
+passport.deserializeUser(function (user, cb) {
+  process.nextTick(function () {
+    return cb(null, user);
+  });
+});
+
+const router = express.Router();
+
 router.get(
   '/federated/google',
-  passport.authenticate('google', { scope: ['profile'] })
+  (req, res, next) => {
+    console.log('hello');
+    next();
+  },
+  passport.authenticate('google')
 );
 
 router.get(
   '/oauth2/redirect/google',
   passport.authenticate('google', {
-    successRedirect: '/',
+    successReturnToOrRedirect: '/',
     failureRedirect: '/login',
   })
 );
