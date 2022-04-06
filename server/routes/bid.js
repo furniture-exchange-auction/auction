@@ -13,6 +13,7 @@ router.get('/:id',
 
 // place bid in an auction (price in req.body)
 router.post('/:id',
+// router.post('/:userId/:id',
   // sessionController.isLoggedIn,
   bidController.placeBid,
   (req, res) => res.status(200).json(res.locals.placedBid)
@@ -20,6 +21,7 @@ router.post('/:id',
 
 // retract bid for an auction
 router.put('/:id',
+// router.put('/:userId/:id',
   // sessionController.isLoggedIn,
   bidController.retractBid,
   (req, res) => res.status(200).json(res.locals.retractedBid)
