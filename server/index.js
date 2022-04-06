@@ -5,11 +5,11 @@ const express = require('express');
 const cors = require('cors');
 const path = require('path');
 const authRouter = require('./routes/auth');
-var cookieParser = require('cookie-parser');
+const cookieParser = require('cookie-parser');
 const db = require('./models/auction');
-var session = require('express-session');
-//var csrf = require('csurf');
-var passport = require('passport');
+const session = require('express-session');
+const csrf = require('csurf');
+const passport = require('passport');
 const app = express();
 
 app.use(cors());
@@ -33,7 +33,7 @@ app.use(
     saveUninitialized: false, // don't create session until something stored
   })
 );
-// app.use(csrf());
+app.use(csrf());
 app.use(passport.authenticate('session'));
 app.use(function (req, res, next) {
   var msgs = req.session.messages || [];
@@ -42,10 +42,10 @@ app.use(function (req, res, next) {
   req.session.messages = [];
   next();
 });
-// app.use(function (req, res, next) {
-//   res.locals.csrfToken = req.csrfToken();
-//   next();
-// });
+app.use(function (req, res, next) {
+  res.locals.csrfToken = req.csrfToken();
+  next();
+});
 
 // serve static files
 app.use(express.static(path.join(__dirname, '../app/out')));
