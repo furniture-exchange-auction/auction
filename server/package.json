@@ -21,7 +21,7 @@
     "express-session": "^1.17.2",
     "passport": "^0.5.2",
     "passport-google-oauth20": "^2.0.0",
-    "passport-google-oidc": "^0.1.0",
+    "passport-local": "^1.0.0",
     "pg": "^8.7.3"
   },
   "devDependencies": {
