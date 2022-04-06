@@ -3,7 +3,7 @@ const db = require('../models/auction');
 const buyerController = {};
 
 buyerController.getAllProducts = (req, res, next) => {
-  const getProductsQuery = 'SELECT * FROM product LEFT JOIN auction ON product._id = auction.product_id LEFT JOIN photo ON auction.product_id = photo.product_id LEFT JOIN bid ON auction._id = bid.auction_id';
+  const getProductsQuery = 'SELECT * FROM product LEFT JOIN auction ON product._id = auction.product_id LEFT JOIN photo ON auction.product_id = photo.product_id LEFT JOIN bid ON auction._id = bid.auction_id AND bid.price = (SELECT MAX (price) FROM bid WHERE auction._id = bid.auction_id AND bid.retracted = false)';
   
   db.query(getProductsQuery)
     .then((data) => {

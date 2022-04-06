@@ -25,6 +25,7 @@ bidController.getBids = (req, res, next) => {
 
 bidController.placeBid = (req, res, next) => {
   const userId = req.user.id;
+  // const userId = req.params.userId;
   const auctionId = req.params.id;
   const { price } = req.body;
   
@@ -50,9 +51,10 @@ bidController.placeBid = (req, res, next) => {
 
 bidController.retractBid = (req, res, next) => {
   const userId = req.user.id;
+  // const userId = req.params.userId;
   const auctionId = req.params.id;
 
-  const retractBidQuery = 'UPDATE bid SET retracted = false WHERE buyer_id = $1 auction_id = $2 AND timestamp = (SELECT MAX (timestamp) FROM bid) RETURNING *';
+  const retractBidQuery = 'UPDATE bid SET retracted = true WHERE buyer_id = $1 AND auction_id = $2 AND timestamp = (SELECT MAX (timestamp) FROM bid) RETURNING *';
   const retractBidQueryVals = [userId, auctionId];
 
   db.query(retractBidQuery, retractBidQueryVals)
