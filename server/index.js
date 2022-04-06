@@ -5,6 +5,9 @@ const express = require('express');
 const cors = require('cors');
 const path = require('path');
 const authRouter = require('./routes/auth');
+const buyerRouter = require('./routes/buyer');
+const sellerRouter = require('./routes/seller');
+const bidRouter = require('./routes/bid');
 const cookieParser = require('cookie-parser');
 const db = require('./models/auction');
 const session = require('express-session');
@@ -33,7 +36,7 @@ app.use(
     saveUninitialized: false, // don't create session until something stored
   })
 );
-app.use(csrf());
+// app.use(csrf());
 app.use(passport.authenticate('session'));
 app.use(function (req, res, next) {
   var msgs = req.session.messages || [];
@@ -42,15 +45,18 @@ app.use(function (req, res, next) {
   req.session.messages = [];
   next();
 });
-app.use(function (req, res, next) {
-  res.locals.csrfToken = req.csrfToken();
-  next();
-});
+// app.use(function (req, res, next) {
+//   res.locals.csrfToken = req.csrfToken();
+//   next();
+// });
 
 // serve static files
 app.use(express.static(path.join(__dirname, '../app/out')));
 
 // configure routes
+app.use('/api/buyer', buyerRouter);
+app.use('/api/seller', sellerRouter);
+app.use('/api/bid', bidRouter);
 app.use('/api', authRouter);
 
 //test

@@ -5,38 +5,41 @@ const router = express.Router();
 const sellerController = require('../controllers/sellerController');
 
 // fetch all listed products
-router.get('/product',
+router.get('/',
+// router.get('/:id',
   // sessionController.isLoggedIn,
   sellerController.getAllProducts,
-  (req, res) => res.status(200).json(res.locals)
+  (req, res) => res.status(200).json(res.locals.products)
 );
 
 // fetch single product detail
-router.get('/product/:id',
+router.get('/:id',
   // sessionController.isLoggedIn,
   sellerController.getProductDetail,
-  (req, res) => res.status(200).json(res.locals)
+  (req, res) => res.status(200).json(res.locals.product)
 );
 
 // add product listing
-router.post('/product',
+router.post('/',
+// router.post('/:id',
   // sessionController.isLoggedIn,
   sellerController.addProduct,
-  (req, res) => res.status(200).json(res.locals)
+  (req, res) => res.status(200).send('success')
 );
 
 // modify product listing
-// router.put('/product/:id',
+// router.put('/:id',
 //   sessionController.isLoggedIn,
 //   sellerController.modifyProduct,
 //   (req, res) => res.status(200).json(res.locals)
 // );
 
 // delete product listing
-router.delete('/product/:id',
+router.delete('/:id',
+// router.delete('/:userId/:id',
   // sessionController.isLoggedIn,
   sellerController.deleteProduct,
-  (req, res) => res.status(200).json(res.locals)
+  (req, res) => res.status(200).json(res.locals.deletedProduct)
 );
 
 module.exports = router;
