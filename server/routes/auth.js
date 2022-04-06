@@ -108,6 +108,7 @@ passport.deserializeUser(function (user, cb) {
 
 const router = express.Router();
 
+
 router.get(
   '/federated/google',
   passport.authenticate('google')
@@ -117,7 +118,7 @@ router.get(
   '/oauth2/redirect/google',
   passport.authenticate('google', {
     successRedirect: '/',
-    failureRedirect: '/login',
+    failureRedirect: '/login'
   })
 );
 
