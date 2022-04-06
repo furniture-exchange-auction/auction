@@ -1,4 +1,5 @@
 /* This example requires Tailwind CSS v2.0+ */
+/* Also the transition temporarily requires that strict mode is disabled in React 18 */
 import { Fragment } from 'react'
 import { Menu, Transition } from '@headlessui/react'
 import { ChevronDownIcon } from '@heroicons/react/solid'
@@ -7,7 +8,7 @@ function classNames(...classes) {
   return classes.filter(Boolean).join(' ')
 }
 
-export default function DropDown() {
+const DropDown = () => {
   return (
     <Menu as="div" className="relative inline-block text-left">
       <div>
@@ -67,10 +68,26 @@ export default function DropDown() {
                 </a>
               )}
             </Menu.Item>
-            
+            {/* <form method="POST" action="#">
+              <Menu.Item>
+                {({ active }) => (
+                  <button
+                    type="submit"
+                    className={classNames(
+                      active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
+                      'block w-full text-left px-4 py-2 text-sm'
+                    )}
+                  >
+                    Sign out
+                  </button>
+                )}
+              </Menu.Item>
+            </form> */}
           </div>
         </Menu.Items>
       </Transition>
     </Menu>
   )
 }
+
+export default DropDown;
