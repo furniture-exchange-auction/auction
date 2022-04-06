@@ -21,10 +21,10 @@ function classNames(...classes) {
   return classes.filter(Boolean).join(' ')
 }
 
-export default function Example() {
+export default function Details() {
 
   return (
-    <div className="bg-white">
+    <div className="bg-white w-full">
       <div className="pt-6">
         <nav aria-label="Breadcrumb">
           <ol role="list" className="max-w-2xl mx-auto px-4 flex items-center space-x-2 sm:px-6 lg:max-w-7xl lg:px-8">
@@ -59,6 +59,14 @@ export default function Example() {
             
 
             <form className="mt-10">
+              <div className="form-control">
+                <label className="label">
+                    <span className="label-text">Your Bid:</span>
+                </label>
+                <label className="input-group">
+                    <input type="text" placeholder="10" className="input input-bordered"/>
+                </label>
+              </div>
               <button
                 type="submit"
                 className="mt-10 w-full bg-indigo-600 border border-transparent rounded-md py-3 px-8 flex items-center justify-center text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"

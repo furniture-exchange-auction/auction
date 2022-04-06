@@ -8,6 +8,7 @@ const authRouter = require('./routes/auth');
 const buyerRouter = require('./routes/buyer');
 const sellerRouter = require('./routes/seller');
 const bidRouter = require('./routes/bid');
+const localRouter = require('./routes/local');
 const cookieParser = require('cookie-parser');
 const db = require('./models/auction');
 const session = require('express-session');
@@ -58,6 +59,7 @@ app.use('/api/buyer', buyerRouter);
 app.use('/api/seller', sellerRouter);
 app.use('/api/bid', bidRouter);
 app.use('/api', authRouter);
+app.use('/api', localRouter);
 
 //test
 app.get('/api', (req, res, next) => {
@@ -82,13 +84,21 @@ app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, '../app/out/index.html'));
 });
 
+app.get('/home', (req, res) => {
+  res.sendFile(path.join(__dirname, '../app/out/index.html'));
+});
+
 app.get('/login', (req, res) => {
   res.sendFile(path.join(__dirname, '../app/out/login.html'));
 });
 
+app.get('/register', (req, res) => {
+  res.sendFile(path.join(__dirname, '../app/out/register.html'));
+});
+
 //Page not found catch-all
 app.use('/*', (req, res, next) => {
-  res.status(404).json('Page not found.');
+  res.sendFile(path.join(__dirname, '../app/out/404.html'));
 });
 
 // configire express global error handler

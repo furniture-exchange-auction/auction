@@ -19,7 +19,7 @@ passport.use(
         .then((fedSearch) => {
           // console.log('fedSearch', fedSearch);
           if (!fedSearch.rows.length) {
-            db.query('INSERT INTO account (display_name) VALUES ($1) RETURNING *', [profile.displayName])
+            db.query('INSERT INTO account (display_name, email) VALUES ($1, $2) RETURNING *', [profile.displayName, profile.emails[0].value])
               .then((addAccount) => {
                 // console.log('addAccount', addAccount);
                 const id = addAccount.rows[0]._id;
@@ -29,7 +29,8 @@ passport.use(
                     const { userId, userDisplayName } = addFed.rows[0];
                     const user = {
                       id: userId,
-                      displayName: userDisplayName
+                      displayName: userDisplayName,
+                      email: profile.emails[0].value
                     };
                     // res.locals.user = user;
                     console.log('success!', user);
@@ -64,10 +65,11 @@ passport.use(
                   return cb(null, false);
                 } 
                 else {
-                  const { _id, display_name } = accSearch.rows[0];
+                  const { _id, display_name, email } = accSearch.rows[0];
                   const user = {
                     id: _id,
-                    displayName: display_name
+                    displayName: display_name,
+                    email: email
                   };
                   // res.locals.user = user;
                   //console.log('success!', user);
