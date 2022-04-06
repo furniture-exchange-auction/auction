@@ -7,7 +7,7 @@ export default function Login() {
     e.preventDefault();
     router.push('/');
   };
- 
+
   return (
     <>
       {/*
@@ -27,7 +27,7 @@ export default function Login() {
               alt="Workflow"
             />
             <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
-              Sign in to your account
+              Register a new account
             </h2>
           </div>
           <form className="mt-8 space-y-6" action="#" method="POST">
@@ -61,31 +61,19 @@ export default function Login() {
                   placeholder="Password"
                 />
               </div>
-            </div>
-
-            <div className="flex items-center justify-between">
-              <div className="flex items-center">
-                <input
-                  id="remember-me"
-                  name="remember-me"
-                  type="checkbox"
-                  className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded"
-                />
-                <label
-                  htmlFor="remember-me"
-                  className="ml-2 block text-sm text-gray-900"
-                >
-                  Remember me
+              <div>
+                <label htmlFor="password" className="sr-only">
+                  Confirm Password
                 </label>
-              </div>
-
-              <div className="text-sm">
-                <a
-                  href="#"
-                  className="font-medium text-indigo-600 hover:text-indigo-500"
-                >
-                  Forgot your password?
-                </a>
+                <input
+                  id="password2"
+                  name="password2"
+                  type="password2"
+                  autoComplete="current-password"
+                  required
+                  className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+                  placeholder="Confirm Password"
+                />
               </div>
             </div>
 
@@ -101,22 +89,24 @@ export default function Login() {
                     aria-hidden="true"
                   />
                 </span>
-                Sign in
+                Register
               </button>
             </div>
           </form>
-          <a href="api/federated/google"><button
-                type="button"
-                className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-orange-600 hover:bg-orange-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500"
-              >
-                <span className="absolute left-0 inset-y-0 flex items-center pl-3">
-                  <LockClosedIcon
-                    className="h-5 w-5 text-orange-500 group-hover:text-orange-400"
-                    aria-hidden="true"
-                  />
-                </span>
-                Sign in with Google
-              </button></a>
+          <a href="api/federated/google">
+            <button
+              type="button"
+              className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-orange-600 hover:bg-orange-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500"
+            >
+              <span className="absolute left-0 inset-y-0 flex items-center pl-3">
+                <LockClosedIcon
+                  className="h-5 w-5 text-orange-500 group-hover:text-orange-400"
+                  aria-hidden="true"
+                />
+              </span>
+              Register Using Your Google Account
+            </button>
+          </a>
         </div>
       </div>
     </>
