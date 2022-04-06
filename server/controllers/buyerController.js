@@ -50,9 +50,6 @@ buyerController.addWatchProduct = (req, res, next) => {
   const addWatchQuery = 'INSERT INTO watch_item (buyer_id, product_id) VALUES ($1, $2) RETURNING *';
   const addWatchQueryVals = [userId, prodId];
 
-  // const postTaskQuery = 'INSERT INTO "Task" (item, created_at) VALUES ($1, $2) RETURNING *';
-  // const postTaskQueryVals = [newTask, new Date()];
-
   db.query(addWatchQuery, addWatchQueryVals)
     .then((data) => {
       res.locals.addedWatch = data.rows[0];
