@@ -4,7 +4,7 @@ const router = express.Router();
 const sessionController = require('../controllers/sessionController');
 const sellerController = require('../controllers/sellerController');
 
-// fetch all products
+// fetch all listed products
 router.get('/product',
   sessionController.isLoggedIn,
   sellerController.getAllProducts,
@@ -21,21 +21,21 @@ router.get('/product/:id',
 // add product listing
 router.post('/product',
   sessionController.isLoggedIn,
-  sellerController.addWatchProduct,
+  sellerController.addProduct,
   (req, res) => res.status(200).json(res.locals)
 );
 
 // modify product listing
-router.put('/product/:id',
-  sessionController.isLoggedIn,
-  sellerController.addWatchProduct,
-  (req, res) => res.status(200).json(res.locals)
-);
+// router.put('/product/:id',
+//   sessionController.isLoggedIn,
+//   sellerController.modifyProduct,
+//   (req, res) => res.status(200).json(res.locals)
+// );
 
 // delete product listing
 router.delete('/product/:id',
   sessionController.isLoggedIn,
-  sellerController.deleteWatchProduct,
+  sellerController.deleteProduct,
   (req, res) => res.status(200).json(res.locals)
 );
 

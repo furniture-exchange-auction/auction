@@ -2,33 +2,26 @@ const express = require('express');
 const router = express.Router();
 
 const sessionController = require('../controllers/sessionController');
-const buyerController = require('../controllers/buyerController');
+const bidController = require('../controllers/bidController');
 
-// fetch all products
-router.get('/product',
-  sessionController.isLoggedIn,
-  buyerController.getAllProducts,
-  (req, res) => res.status(200).json(res.locals)
-);
-
-// fetch single product detail
+// fetch all bids for a product
 router.get('/product/:id',
   sessionController.isLoggedIn,
-  buyerController.getProductDetail,
+  bidController.getAllProducts,
   (req, res) => res.status(200).json(res.locals)
 );
 
-// add product to watch list
+// place bid on a product (amount in req.body)
 router.post('/product/:id',
   sessionController.isLoggedIn,
-  buyerController.addWatchProduct,
+  bidController.addWatchProduct,
   (req, res) => res.status(200).json(res.locals)
 );
 
-// delete product from watch list
-router.delete('/product/:id',
+// retract bid on a product
+router.put('/product/:id',
   sessionController.isLoggedIn,
-  buyerController.deleteWatchProduct,
+  bidController.deleteWatchProduct,
   (req, res) => res.status(200).json(res.locals)
 );
 
