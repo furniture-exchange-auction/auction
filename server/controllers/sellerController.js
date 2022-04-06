@@ -3,7 +3,8 @@ const db = require('../models/auction');
 const sellerController = {};
 
 sellerController.getAllProducts = (req, res, next) => {
-  const userId = res.locals.userId;
+  console.log(req.user);
+  const userId = req.user.id;
   const getProductsQuery = 'SELECT p._id, p.title, a.*, ph.*, b.* FROM product p, auction a, photo ph, bid b WHERE p.seller_id = $1 AND a.product_id = p._id AND ph.product_id = p._id AND a.active = true AND b.auction_id = a._id';
   
   db.query(getProductsQuery, [userId])
@@ -24,9 +25,10 @@ sellerController.getAllProducts = (req, res, next) => {
 };
 
 sellerController.getProductDetail = (req, res, next) => {
-  const userId = res.locals.userId;
+  console.log(req.user);
+  const userId = req.user.id;
   const prodId = req.params.id;
-  const getProductDetailQuery = 'SELECT p._id, p.title, a.*, ph.*, b.* FROM product p, auction a, photo ph, bid b WHERE p.seller_id = $1 AND p._id = $1 a.product_id = p._id AND ph.product_id = p._id AND a.active = true AND b.auction_id = a._id';
+  const getProductDetailQuery = 'SELECT p._id, p.title, a.*, ph.*, b.* FROM product p, auction a, photo ph, bid b WHERE p.seller_id = $1 AND p._id = $2 AND a.product_id = p._id AND ph.product_id = p._id AND a.active = true AND b.auction_id = a._id';
   const getProductDetailQueryVals = [userId, prodId];
   
   db.query(getProductDetailQuery, getProductDetailQueryVals)
@@ -47,7 +49,9 @@ sellerController.getProductDetail = (req, res, next) => {
 };
 
 sellerController.addProduct = (req, res, next) => {
-  const userId = res.locals.userId;
+  console.log('user', req.user);
+  const userId = req.user.id;
+  // const userId = req.params.id;
   const { opening_bid, title, condition, brand, description } = req.body;
   
   const addProductQuery = 'INSERT INTO product (seller_id, opening_bid, title, condition, brand, description) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *';
@@ -70,19 +74,22 @@ sellerController.addProduct = (req, res, next) => {
           db.query(findCategoryQuery, [category])
             .then((data) => {
               const categoryId = data.rows[0]._id;
-
+              
               const addCategoryQuery = 'INSERT INTO product_category (product_id, category_id) VALUES ($1, $2)';
               const addCategoryQueryVals = [prodId, categoryId];
 
               db.query(addCategoryQuery, addCategoryQueryVals)
                 .then(() => {
-                  const { end } = req.body;
-
-                  const addAuctionQuery = 'INSERT INTO auction (product_id, end) VALUES ($1, $2)';
-                  const addAuctionQueryVals = [prodId, end];
+                  const { end_time } = req.body;
+                  
+                  const addAuctionQuery = 'INSERT INTO auction (product_id, end_time) VALUES ($1, $2)';
+                  const addAuctionQueryVals = [prodId, new Date(end_time)];
 
                   db.query(addAuctionQuery, addAuctionQueryVals)
-                    .then(() => next())
+                    .then(() => {
+                      console.log('should be done');
+                      return next();
+                    })
                     .catch((err) => {
                       return next({
                         log: `sellerController.addProduct: addAuction ERROR: ${
@@ -164,15 +171,16 @@ sellerController.addProduct = (req, res, next) => {
 // };
 
 sellerController.deleteProduct = (req, res, next) => {
-  const userId = res.locals.userId;
+  const userId = req.user.id;
+  // const userId = req.params.userId;
   const prodId = req.params.id;
 
-  const deleteWatchQuery = 'DELETE FROM product WHERE seller_id = $1 AND _id = $2 RETURNING *';
-  const deleteWatchQueryVals = [userId, prodId];
+  const deleteProductQuery = 'DELETE FROM product WHERE seller_id = $1 AND _id = $2 RETURNING *';
+  const deleteProductQueryVals = [userId, prodId];
 
-  db.query(deleteTaskQuery, deleteTaskQueryVals)
+  db.query(deleteProductQuery, deleteProductQueryVals)
     .then((data) => {
-      res.locals.deletedWatch = data.rows[0];
+      res.locals.deletedProduct = data.rows[0];
       return next();
     })
     .catch((err) => {
