@@ -1,14 +1,21 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { createAsyncThunk } from '@reduxjs/toolkit';
 
+/*
+Checking to see if user is signed in
+Setting username, firstname 
+Adding all items for user in array
+*/
 const initialUserState = {
   loggedIn: false,
   username: '',
   firstName: '',
+  watchList: [],
+  items: []
 };
 
 export const loginThunk = createAsyncThunk(
-  'users/getLoginStatus',
+  'api/users/getLoginStatus',
   async (body) => {
     try {
       console.log('in the login Thunk, body: ', body);
@@ -29,7 +36,7 @@ export const loginThunk = createAsyncThunk(
 );
 
 export const signupThunk = createAsyncThunk(
-  'users/getSignupStatus',
+  'api/users/getSignupStatus',
   async (body) => {
     try {
       console.log('in the signup Thunk function, body:', body);
@@ -49,10 +56,32 @@ export const signupThunk = createAsyncThunk(
   }
 );
 
+export const userItems = createAsyncThunk(
+    'api/user/items/${id}',
+    async (id) => {
+      try {
+        console.log('in the userItems Thunk function');
+        const responseJSON = await fetch(`/api/user/items/${id}`);
+        const response = await responseJSON.json();
+        
+        console.log('Here is your data: ', response);
+        if(Array.isArray(response)) {
+          return response.reverse();
+        } else return response;
+      } catch (e) {
+        console.log(e);
+      }
+    }
+  );
+
 const userSlice = createSlice({
   name: 'users',
   initialState: initialUserState,
-  reducers: {},
+  reducers: {
+    setWatchList(state, action) {
+      state.watchList = action.payload;
+    }
+  },
   extraReducers: (builder) => {
     builder
       .addCase(loginThunk.fullfilled, (state, action) => {
@@ -69,8 +98,13 @@ const userSlice = createSlice({
           state.username = action.payload.username;
           state.firstName = action.payload.firstName;
         }
-      });
+      })
+      .addCase(userItems.fulfilled, (state, action) => {
+        state.userItems = action.payload;
+    });
   },
 });
+
+export const userActions = userSlice.actions;
 
 export default userSlice.reducer;
