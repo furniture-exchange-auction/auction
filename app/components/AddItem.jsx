@@ -16,6 +16,8 @@ export default function AddItem() {
 
 
   const handleSubmit = (e) => {
+    e.preventDefault()
+    console.log('in handleSubmit ')
     return dispatch(addItem(body))
       .then(() => dispatch(syncItems()))
   }
@@ -88,7 +90,11 @@ export default function AddItem() {
                 class="ml-2 outline-none py-1 px-2 text-md border-2 rounded-md"
               />
             </div>
-            <button class=" px-6 py-2 mx-auto block rounded-md text-lg font-semibold text-indigo-100 bg-indigo-600  ">
+            <button 
+            class=" px-6 py-2 mx-auto block rounded-md text-lg font-semibold text-indigo-100 bg-indigo-600"
+            type="submit"
+            onClick={(e)=>handleSubmit(e)}
+            >
               ADD ITEM
             </button>
           </div>

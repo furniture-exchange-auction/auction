@@ -96,6 +96,10 @@ app.get('/register', (req, res) => {
   res.sendFile(path.join(__dirname, '../app/out/register.html'));
 });
 
+app.get('/test', (req, res) => {
+  res.sendFile(path.join(__dirname, '../app/out/test.html'));
+});
+
 //Page not found catch-all
 app.use('/*', (req, res, next) => {
   res.sendFile(path.join(__dirname, '../app/out/404.html'));

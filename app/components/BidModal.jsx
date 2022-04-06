@@ -10,7 +10,7 @@ const product = {
   rating: 3.9,
   reviewCount: 117,
   href: '#',
-  imageSrc: 'https://tailwindui.com/img/ecommerce-images/product-quick-preview-02-detail.jpg',
+  imageSrc: 'https://i.ibb.co/yXfbTBS/Screen-Shot-2022-04-06-at-5-29-38-PM.png',
   imageAlt: 'Two each of gray, white, and black shirts arranged on table.',
   colors: [
     { name: 'White', class: 'bg-white', selectedClass: 'ring-gray-400' },

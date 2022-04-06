@@ -3,19 +3,19 @@ import { StarIcon } from '@heroicons/react/solid'
 import { RadioGroup } from '@headlessui/react'
 
 const product = {
-  name: 'Name of Item',
-  price: '$Price',
+  name: 'Lucious Leather Beauty',
+  price: '$250',
   href: '#',
   images: [
     {
-      src: 'https://tailwindui.com/img/ecommerce-images/product-page-02-secondary-product-shot.jpg',
+      src: 'https://i.ibb.co/yXfbTBS/Screen-Shot-2022-04-06-at-5-29-38-PM.png',
       alt: 'Two each of gray, white, and black shirts laying flat.',
     },
   ],
   description:
-    'Description of Item',
+    "Oh, buddy. This is the couch of a lifetime. A Lifetime of couch. Only getting rid of it because it reminds me of my ex-wife. She left me for my brother 4 months ago and I haven't been the same since. Don't miss out on this opportunity like I missed out on mine ",
   seller:
-    'Seller of Item',
+    'A stupid, stupid man',
 }
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ')
@@ -64,7 +64,7 @@ export default function Details() {
                     <span className="label-text">Your Bid:</span>
                 </label>
                 <label className="input-group">
-                    <input type="text" placeholder="10" className="input input-bordered"/>
+                    <input type="text" placeholder="260" className="input input-bordered"/>
                 </label>
               </div>
               <button
