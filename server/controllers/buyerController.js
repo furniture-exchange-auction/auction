@@ -3,7 +3,7 @@ const db = require('../models/auction');
 const buyerController = {};
 
 buyerController.getAllProducts = (req, res, next) => {
-  const getProductsQuery = 'SELECT p._id, p.title, a.*, ph.*, b.* FROM product p, auction a, photo ph, bid b WHERE a.product_id = p._id AND ph.product_id = p._id AND a.active = true AND b.auction_id = a._id';
+  const getProductsQuery = 'SELECT * FROM product LEFT JOIN auction ON product._id = auction.product_id LEFT JOIN photo ON auction.product_id = photo.product_id LEFT JOIN bid ON auction._id = bid.auction_id';
   
   db.query(getProductsQuery)
     .then((data) => {
@@ -24,7 +24,7 @@ buyerController.getAllProducts = (req, res, next) => {
 
 buyerController.getProductDetail = (req, res, next) => {
   const prodId = req.params.id;
-  const getProductDetailQuery = 'SELECT p._id, p.title, a.*, ph.*, b.* FROM product p, auction a, photo ph, bid b WHERE p._id = $1 a.product_id = p._id AND ph.product_id = p._id AND a.active = true AND b.auction_id = a._id';
+  const getProductDetailQuery = 'SELECT p._id, p.title, a.*, ph.*, b.* FROM product p, auction a, photo ph, bid b WHERE p._id = $1 AND a.product_id = p._id AND ph.product_id = p._id AND a.active = true AND b.auction_id = a._id';
   
   db.query(getProductDetailQuery, [prodId])
     .then((data) => {
@@ -44,7 +44,7 @@ buyerController.getProductDetail = (req, res, next) => {
 };
 
 buyerController.addWatchProduct = (req, res, next) => {
-  const userId = res.locals.userId;
+  const userId = req.user.id;
   const prodId = req.params.id;
   
   const addWatchQuery = 'INSERT INTO watch_item (buyer_id, product_id) VALUES ($1, $2) RETURNING *';
@@ -68,7 +68,7 @@ buyerController.addWatchProduct = (req, res, next) => {
 };
 
 buyerController.deleteWatchProduct = (req, res, next) => {
-  const userId = res.locals.userId;
+  const userId = req.user.id;
   const prodId = req.params.id;
 
   const deleteWatchQuery = 'DELETE FROM watch_item WHERE buyer_id = $1 AND product_id = $2 RETURNING *';
