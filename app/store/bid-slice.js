@@ -29,7 +29,7 @@ const bidSlice = createSlice({
 	initialState: initialBidState,
 	reducers: {},
 	extraReducers: (builder) => {
-		builder.addCase(updateBid.fufilled, (state, action) => {
+		builder.addCase(updateBid.fulfilled, (state, action) => {
 			if(typeof action.payload === 'string'){
 				state.currentBidPrice = action.payload.currentBidPrice
 			}
