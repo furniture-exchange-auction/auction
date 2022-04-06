@@ -201,6 +201,10 @@ export default function NavBar() {
                 ))}
               </div>
 
+              
+
+              
+
               <div className="border-t border-gray-200 py-6 px-4 space-y-6">
                 <div className="flow-root">
                   <a
@@ -246,7 +250,7 @@ export default function NavBar() {
                   <span className="sr-only">Workflow</span>
                   <img
                     className="h-8 w-auto"
-                    src="https://tailwindui.com/img/logos/workflow-mark.svg?color=indigo&shade=600"
+                    src="https://i.ibb.co/B6WyMfZ/Circle-Logo.png"
                     alt=""
                   />
                 </a>
@@ -266,6 +270,10 @@ export default function NavBar() {
                   ))}
                 </div>
               </Popover.Group>
+
+              <div className="border-t border-gray-200 py-6 px-20 space-y-6">
+                <h1 className="text-4xl font-extrabold tracking-tight text-gray-900">Neel's Auction House</h1>
+              </div>
 
               <div className="ml-auto flex items-center">
                 <div className="hidden lg:flex lg:flex-1 lg:items-center lg:justify-end lg:space-x-6">
