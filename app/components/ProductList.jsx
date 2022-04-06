@@ -51,8 +51,17 @@ export default function ProductList() {
 								/>
 							</div>
 							<h3 className="mt-4 text-sm text-gray-700">{product.name}</h3>
-							<span className="mt-1 text-lg font-medium text-gray-900">{product.price}</span>
-							<BidButton/>
+							<div >
+							  <span className="mt-1 text-lg font-medium text-gray-900">{product.price}</span>
+							  <div className="inline pl-2">
+							    <BidButton/>
+							  </div>
+							</div>
+							
+					
+							
+						
+							
 						</a>
 					))}
 				</div>

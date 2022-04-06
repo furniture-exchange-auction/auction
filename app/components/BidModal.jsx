@@ -77,8 +77,6 @@ export default function BidModal({ open, setOpen }) {
                   <XIcon className="h-6 w-6" aria-hidden="true" />
                 </button>
                 <Details/>
-
-                
               </div>
             </div>
           </Transition.Child>
