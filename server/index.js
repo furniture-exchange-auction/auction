@@ -5,6 +5,7 @@ const express = require('express');
 const cors = require('cors');
 const path = require('path');
 const authRouter = require('./routes/auth');
+const localRouter = require('./routes/local');
 const cookieParser = require('cookie-parser');
 const db = require('./models/auction');
 const session = require('express-session');
@@ -33,7 +34,7 @@ app.use(
     saveUninitialized: false, // don't create session until something stored
   })
 );
-app.use(csrf());
+// app.use(csrf());
 app.use(passport.authenticate('session'));
 app.use(function (req, res, next) {
   var msgs = req.session.messages || [];
@@ -42,16 +43,17 @@ app.use(function (req, res, next) {
   req.session.messages = [];
   next();
 });
-app.use(function (req, res, next) {
-  res.locals.csrfToken = req.csrfToken();
-  next();
-});
+// app.use(function (req, res, next) {
+//   res.locals.csrfToken = req.csrfToken();
+//   next();
+// });
 
 // serve static files
 app.use(express.static(path.join(__dirname, '../app/out')));
 
 // configure routes
 app.use('/api', authRouter);
+app.use('/api', localRouter);
 
 //test
 app.get('/api', (req, res, next) => {
@@ -76,13 +78,21 @@ app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, '../app/out/index.html'));
 });
 
+app.get('/home', (req, res) => {
+  res.sendFile(path.join(__dirname, '../app/out/index.html'));
+});
+
 app.get('/login', (req, res) => {
   res.sendFile(path.join(__dirname, '../app/out/login.html'));
 });
 
+app.get('/register', (req, res) => {
+  res.sendFile(path.join(__dirname, '../app/out/register.html'));
+});
+
 //Page not found catch-all
 app.use('/*', (req, res, next) => {
-  res.status(404).json('Page not found.');
+  res.sendFile(path.join(__dirname, '../app/out/404.html'));
 });
 
 // configire express global error handler
