@@ -3,13 +3,13 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 
 /*
 Checking to see if user is signed in
-Setting username, firstname 
+Setting username, email 
 Adding all items for user in array
 */
 const initialUserState = {
   loggedIn: false,
   username: '',
-  firstName: '',
+  email: '',
   watchList: [],
   items: []
 };
@@ -84,11 +84,11 @@ const userSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      .addCase(loginThunk.fullfilled, (state, action) => {
+      .addCase(loginThunk.fulfilled, (state, action) => {
         if (action.payload.loggedIn) {
           state.loggedIn = action.payload.loggedIn;
           state.username = action.payload.username;
-          state.firstName = action.payload.firstName;
+          state.email = action.payload.firstName;
         }
       })
       .addCase(signupThunk.fulfilled, (state, action) => {
@@ -96,7 +96,7 @@ const userSlice = createSlice({
         if (action.payload.loggedIn) {
           state.loggedIn = action.payload.loggedIn;
           state.username = action.payload.username;
-          state.firstName = action.payload.firstName;
+          state.email = action.payload.email;
         }
       })
       .addCase(userItems.fulfilled, (state, action) => {
