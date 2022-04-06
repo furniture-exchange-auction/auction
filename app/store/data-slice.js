@@ -13,11 +13,29 @@ const initialItemsState = {
 }
 
 export const syncItems = createAsyncThunk(
-    'api/items/syncItems',
+    'api/buyer',
     async () => {
       try {
         console.log('in the syncItems Thunk function');
-        const responseJSON = await fetch('api/items');
+        const responseJSON = await fetch('api/buyer');
+        const response = await responseJSON.json();
+        
+        console.log('Here is your data: ', response);
+        if(Array.isArray(response)) {
+          return response.reverse();
+        } else return response;
+      } catch (e) {
+        console.log(e);
+      }
+    }
+  );
+
+  export const syncSellerItems = createAsyncThunk(
+    'api/seller',
+    async () => {
+      try {
+        console.log('in the syncItems Thunk function');
+        const responseJSON = await fetch('api/seller');
         const response = await responseJSON.json();
         
         console.log('Here is your data: ', response);
@@ -31,10 +49,10 @@ export const syncItems = createAsyncThunk(
   );
 
 export const addItem = createAsyncThunk(
-  'api/items/addItem',
+  'api/seller',
   async (body) => {
     try {
-      const addedIem = await fetch('api/items', {
+      const addedIem = await fetch('api/seller', {
         method: 'POST',
         headers: {
           'Content-Type': 'Application/JSON',
@@ -49,32 +67,32 @@ export const addItem = createAsyncThunk(
   }
 );
 
-export const editItem = createAsyncThunk(
-    'api/items/editItem',
-    async (editBody) => {
-      try {
-        console.log('editBody',editBody);
-        console.log('in the editItem Thunk function');
-        const editItem = await fetch('api/items', {
-          method: 'PUT',
-          headers: {
-            'Content-Type': 'Application/JSON',
-          },
-          body: JSON.stringify(editBody),
-        });
-        console.log('out of the editItems Thunk function', editItem);
-        return editItem.status;
-      } catch (e) {
-        console.log(e);
-      }
-    }
-  );
+// export const editItem = createAsyncThunk(
+//     'api/items/editItem',
+//     async (editBody) => {
+//       try {
+//         console.log('editBody',editBody);
+//         console.log('in the editItem Thunk function');
+//         const editItem = await fetch('api/items', {
+//           method: 'PUT',
+//           headers: {
+//             'Content-Type': 'Application/JSON',
+//           },
+//           body: JSON.stringify(editBody),
+//         });
+//         console.log('out of the editItems Thunk function', editItem);
+//         return editItem.status;
+//       } catch (e) {
+//         console.log(e);
+//       }
+//     }
+//   );
 
 	export const deleteItem = createAsyncThunk(
-  'api/items/deleteItem',
+  'api/seller',
   async (id) => {
     try {
-      const deletedItem = await fetch(`api/items/${id}`, {
+      const deletedItem = await fetch(`api/seller/${id}`, {
         method: 'DELETE',
         headers: {
           'Content-Type': 'Application/JSON',
