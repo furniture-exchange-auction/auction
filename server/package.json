@@ -25,6 +25,7 @@
     "pg": "^8.7.3"
   },
   "devDependencies": {
+    "eslint": "^8.12.0",
     "nodemon": "^2.0.15"
   }
 }
